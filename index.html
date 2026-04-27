@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Valore dei Soldi 💰</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    /* ===== SCREEN MANAGEMENT ===== */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ===== CARD ===== */
+    .card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .app-title {
+      font-size: 2.4em;
+      font-weight: 800;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .app-subtitle {
+      font-size: 1.15em;
+      color: #7f8c8d;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .intro-desc {
+      font-size: 1.1em;
+      color: #555;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .section-heading {
+      font-size: 1em;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 14px;
+    }
+
+    /* ===== INTRO: PRICE CATEGORY CARDS ===== */
+    .price-categories {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .cat-card {
+      border-radius: 18px;
+      padding: 16px 10px;
+      text-align: left;
+    }
+    .cat-card.low    { background: #e8f5e9; border: 3px solid #66bb6a; }
+    .cat-card.medium { background: #fff8e1; border: 3px solid #ffa726; }
+    .cat-card.high   { background: #fce4ec; border: 3px solid #ef5350; }
+
+    .cat-title {
+      font-size: 0.85em;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .cat-card.low    .cat-title { color: #2e7d32; }
+    .cat-card.medium .cat-title { color: #e65100; }
+    .cat-card.high   .cat-title { color: #b71c1c; }
+
+    .cat-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 5px 0;
+      font-size: 0.88em;
+      color: #333;
+    }
+    .cat-item .item-price {
+      font-weight: 700;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ===== PROGRESS ===== */
+    .progress-section { margin-bottom: 18px; }
+
+    .progress-label {
+      font-size: 1em;
+      color: rgba(255,255,255,0.95);
+      text-align: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .progress-bar {
+      background: rgba(255,255,255,0.3);
+      border-radius: 50px;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: white;
+      height: 100%;
+      border-radius: 50px;
+      transition: width 0.5s ease;
+    }
+
+    /* ===== EXERCISE ELEMENTS ===== */
+    .exercise-question {
+      font-size: 1.5em;
+      font-weight: 800;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.35;
+    }
+
+    .product-display { text-align: center; margin: 16px 0; }
+
+    .product-emoji-large {
+      font-size: 5em;
+      display: block;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .product-name-label {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .price-big {
+      font-size: 3.4em;
+      font-weight: 900;
+      color: #5c6bc0;
+      text-align: center;
+      margin: 14px 0 22px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ===== BUTTONS – COMMON ===== */
+    .btn {
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.2em;
+      font-weight: 700;
+      padding: 15px 32px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      line-height: 1;
+    }
+    .btn:not(:disabled):hover  { transform: translateY(-3px); }
+    .btn:not(:disabled):active { transform: scale(0.96); }
+    .btn:disabled { cursor: default; opacity: 0.7; }
+
+    /* ===== SÌ / NO ===== */
+    .yesno-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .btn-si {
+      background: #4caf50;
+      color: #fff;
+      min-width: 130px;
+      box-shadow: 0 5px 18px rgba(76,175,80,0.4);
+    }
+
+    .btn-no {
+      background: #ef5350;
+      color: #fff;
+      min-width: 130px;
+      box-shadow: 0 5px 18px rgba(239,83,80,0.4);
+    }
+
+    /* ===== OPTION BUTTONS (types 2 & 3) ===== */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .btn-option {
+      background: #f5f5f5;
+      color: #2c3e50;
+      border: 3px solid #e0e0e0;
+      border-radius: 18px;
+      padding: 16px 20px;
+      font-size: 1.2em;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 62px;
+    }
+    .btn-option:not(.answered):hover {
+      background: #e8eaf6;
+      border-color: #7986cb;
+      transform: translateY(-2px);
+    }
+    .btn-option.correct {
+      background: #e8f5e9 !important;
+      border-color: #4caf50 !important;
+      color: #1b5e20 !important;
+    }
+    .btn-option.wrong {
+      background: #ffebee !important;
+      border-color: #ef5350 !important;
+      color: #b71c1c !important;
+    }
+    .option-emoji { font-size: 1.4em; }
+
+    /* ===== FEEDBACK BOX ===== */
+    .feedback-box {
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin: 18px 0 4px;
+      display: none;
+      line-height: 1.55;
+    }
+    .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+    .feedback-box.correct-fb {
+      background: #e8f5e9;
+      border: 3px solid #4caf50;
+      color: #1b5e20;
+    }
+    .feedback-box.wrong-fb {
+      background: #ffebee;
+      border: 3px solid #ef5350;
+      color: #b71c1c;
+    }
+
+    /* ===== NEXT BUTTON ===== */
+    .next-wrap { text-align: center; margin-top: 14px; }
+
+    .btn-next {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 15px 38px;
+      font-size: 1.2em;
+      font-weight: 800;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(102,126,234,0.45);
+      display: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-next.show { display: inline-block; animation: fadeIn 0.3s ease; }
+    .btn-next:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(102,126,234,0.55); }
+    .btn-next:active { transform: scale(0.96); }
+
+    /* ===== START / REPLAY BUTTON ===== */
+    .center-btn { display: flex; justify-content: center; margin-top: 22px; }
+
+    .btn-start {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 18px 50px;
+      font-size: 1.4em;
+      font-weight: 800;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 26px rgba(102,126,234,0.55);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(102,126,234,0.65); }
+    .btn-start:active { transform: scale(0.96); }
+
+    /* ===== RESULTS SCREEN ===== */
+    .results-icon   { font-size: 4em; text-align: center; margin: 10px 0; }
+    .score-big      { font-size: 5.5em; font-weight: 900; color: #5c6bc0; text-align: center; line-height: 1; margin: 8px 0; }
+    .score-sub      { font-size: 1.1em; color: #999; text-align: center; margin-bottom: 12px; }
+    .result-msg     { font-size: 1.3em; font-weight: 700; color: #2c3e50; text-align: center; line-height: 1.5; margin: 12px 0 20px; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      0%   { transform: scale(0.55); opacity: 0; }
+      65%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .pop { animation: popIn 0.45s ease; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .card { padding: 24px 16px; }
+      .app-title { font-size: 1.8em; }
+      .price-categories { grid-template-columns: 1fr; }
+      .price-big { font-size: 2.5em; }
+      .score-big { font-size: 4em; }
+      .exercise-question { font-size: 1.25em; }
+      .product-emoji-large { font-size: 3.8em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============================================================
+       INTRO SCREEN
+  ============================================================ -->
+  <div id="screen-intro" class="screen active">
+    <div class="card">
+      <div class="app-title">💰 Il Valore dei Soldi</div>
+      <div class="app-subtitle">Impariamo insieme i prezzi!</div>
+      <p class="intro-desc">
+        Ogni cosa che compriamo ha un prezzo.<br>
+        Alcuni prezzi sono <strong>bassi</strong>, altri <strong>medi</strong>, altri <strong>alti</strong>.
+      </p>
+
+      <div class="section-heading">📊 Esempi di prezzi</div>
+
+      <div class="price-categories">
+        <!-- LOW -->
+        <div class="cat-card low">
+          <div class="cat-title">💚 Bassi<br><small style="font-weight:400">fino a €5</small></div>
+          <div class="cat-item"><span>💧</span><span>Acqua</span><span class="item-price">€1,00</span></div>
+          <div class="cat-item"><span>☕</span><span>Caffè</span><span class="item-price">€1,50</span></div>
+          <div class="cat-item"><span>🍦</span><span>Gelato</span><span class="item-price">€2,00</span></div>
+          <div class="cat-item"><span>🥪</span><span>Panino</span><span class="item-price">€3,00</span></div>
+        </div>
+        <!-- MEDIUM -->
+        <div class="cat-card medium">
+          <div class="cat-title">🟡 Medi<br><small style="font-weight:400">da €5 a €100</small></div>
+          <div class="cat-item"><span>🍕</span><span>Pizza</span><span class="item-price">€8,00</span></div>
+          <div class="cat-item"><span>🎬</span><span>Cinema</span><span class="item-price">€10,00</span></div>
+          <div class="cat-item"><span>📚</span><span>Libro</span><span class="item-price">€15,00</span></div>
+          <div class="cat-item"><span>👕</span><span>Maglietta</span><span class="item-price">€20,00</span></div>
+        </div>
+        <!-- HIGH -->
+        <div class="cat-card high">
+          <div class="cat-title">🔴 Alti<br><small style="font-weight:400">oltre €100</small></div>
+          <div class="cat-item"><span>🚲</span><span>Bici</span><span class="item-price">€200</span></div>
+          <div class="cat-item"><span>📱</span><span>Smartphone</span><span class="item-price">€300</span></div>
+          <div class="cat-item"><span>📺</span><span>Televisore</span><span class="item-price">€400</span></div>
+          <div class="cat-item"><span>💻</span><span>Laptop</span><span class="item-price">€500</span></div>
+        </div>
+      </div>
+
+      <div class="center-btn">
+        <button class="btn-start" onclick="startGame()">Inizia gli esercizi ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       EXERCISE SCREEN
+  ============================================================ -->
+  <div id="screen-exercise" class="screen">
+    <div class="progress-section">
+      <div class="progress-label" id="progress-label">Esercizio 1 di 10</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="card" id="exercise-card">
+      <!-- Rendered dynamically -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+       RESULTS SCREEN
+  ============================================================ -->
+  <div id="screen-results" class="screen">
+    <div class="card">
+      <div class="results-icon" id="results-icon">🌟</div>
+      <div class="score-big" id="score-big">0</div>
+      <div class="score-sub">risposte corrette su 10</div>
+      <div class="result-msg" id="result-msg">Ottimo lavoro!</div>
+      <div class="center-btn">
+        <button class="btn-start" onclick="restartGame()">🔄 Gioca ancora!</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .container -->
+
+<script>
+/* ================================================================
+   DATA
+================================================================ */
+const PRODUCTS = [
+  // Basso (low) – typical price ≤ €5
+  { name: "Bottiglietta d'acqua",  emoji: "💧", price:   1.00, category: "basso" },
+  { name: "Caffè al bar",          emoji: "☕", price:   1.50, category: "basso" },
+  { name: "Gelato",                emoji: "🍦", price:   2.00, category: "basso" },
+  { name: "Panino",                emoji: "🥪", price:   3.00, category: "basso" },
+  { name: "Giornale",              emoji: "📰", price:   1.50, category: "basso" },
+  { name: "Cioccolatina",          emoji: "🍫", price:   1.00, category: "basso" },
+  // Medio (medium) – €5–€100
+  { name: "Pizza",                 emoji: "🍕", price:   8.00, category: "medio" },
+  { name: "Biglietto cinema",      emoji: "🎬", price:  10.00, category: "medio" },
+  { name: "Libro",                 emoji: "📚", price:  15.00, category: "medio" },
+  { name: "Maglietta",             emoji: "👕", price:  20.00, category: "medio" },
+  { name: "Zaino scolastico",      emoji: "🎒", price:  30.00, category: "medio" },
+  { name: "Scarpe da ginnastica",  emoji: "👟", price:  60.00, category: "medio" },
+  // Alto (high) – > €100
+  { name: "Bicicletta",            emoji: "🚲", price: 200.00, category: "alto"  },
+  { name: "Smartphone",            emoji: "📱", price: 300.00, category: "alto"  },
+  { name: "Televisore",            emoji: "📺", price: 400.00, category: "alto"  },
+  { name: "Laptop",                emoji: "💻", price: 500.00, category: "alto"  },
+];
+
+/* ================================================================
+   HELPERS
+================================================================ */
+/** Format a price in Italian style: € X,XX */
+function fmt(price) {
+  return "€\u202f" + price.toFixed(2).replace(".", ",");
+}
+
+/** Fisher-Yates shuffle – returns a new shuffled array */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/** Pick a random element from an array */
+function randFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/** Products belonging to a given category */
+function byCategory(cat) { return PRODUCTS.filter(p => p.category === cat); }
+
+/** Random product from a category */
+function randByCat(cat)  { return randFrom(byCategory(cat)); }
+
+/** The two categories that are NOT `cat` */
+function otherCats(cat)  { return ["basso", "medio", "alto"].filter(c => c !== cat); }
+
+/* ================================================================
+   EXERCISE FACTORY
+================================================================ */
+/**
+ * TYPE 1 – product + price shown → "Is this a reasonable price?" (SÌ / NO)
+ *   50 % of the time the price is the real one (→ SÌ)
+ *   50 % of the time the price is from a completely different category (→ NO)
+ */
+function makeType1(product) {
+  const isReasonable = Math.random() < 0.5;
+  let displayPrice;
+
+  if (isReasonable) {
+    displayPrice = product.price;
+  } else {
+    // Pick a price from the category that is farthest away
+    const wrongCat = product.category === "basso" ? "alto"
+                   : product.category === "alto"  ? "basso"
+                   : (Math.random() < 0.5 ? "basso" : "alto");
+    displayPrice = randByCat(wrongCat).price;
+  }
+  return { type: 1, product, displayPrice, isReasonable };
+}
+
+/**
+ * TYPE 2 – product shown → pick the correct price (3 options)
+ *   1 correct price + 1 from each of the two other categories
+ */
+function makeType2(product) {
+  const [cat1, cat2] = shuffle(otherCats(product.category));
+  const options = shuffle([
+    { label: fmt(product.price), isCorrect: true  },
+    { label: fmt(randByCat(cat1).price), isCorrect: false },
+    { label: fmt(randByCat(cat2).price), isCorrect: false },
+  ]);
+  return { type: 2, product, options };
+}
+
+/**
+ * TYPE 3 – price shown → pick the matching product (3 options)
+ *   1 correct product + 1 from each of the two other categories
+ */
+function makeType3(product) {
+  const [cat1, cat2] = shuffle(otherCats(product.category));
+  const options = shuffle([
+    { product,              isCorrect: true  },
+    { product: randByCat(cat1), isCorrect: false },
+    { product: randByCat(cat2), isCorrect: false },
+  ]);
+  return { type: 3, product, options };
+}
+
+/* ================================================================
+   EXERCISE GENERATION (10 total: 4 × type1, 3 × type2, 3 × type3)
+================================================================ */
+function generateExercises() {
+  const typeSeq      = shuffle([1, 1, 1, 1, 2, 2, 2, 3, 3, 3]);
+  const productPool  = shuffle(PRODUCTS);
+  return typeSeq.map((type, i) => {
+    const product = productPool[i % productPool.length];
+    return type === 1 ? makeType1(product)
+         : type === 2 ? makeType2(product)
+                      : makeType3(product);
+  });
+}
+
+/* ================================================================
+   STATE
+================================================================ */
+let exercises    = [];
+let currentIndex = 0;
+let score        = 0;
+let answered     = false;
+
+/* ================================================================
+   SCREEN HELPERS
+================================================================ */
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* ================================================================
+   GAME CONTROL
+================================================================ */
+function startGame() {
+  exercises    = generateExercises();
+  currentIndex = 0;
+  score        = 0;
+  showScreen("screen-exercise");
+  renderExercise();
+}
+
+function restartGame() { showScreen("screen-intro"); }
+
+function nextExercise() {
+  currentIndex++;
+  if (currentIndex >= exercises.length) showResults();
+  else renderExercise();
+}
+
+/* ================================================================
+   PROGRESS BAR
+================================================================ */
+function updateProgress() {
+  const pct = (currentIndex / exercises.length) * 100;
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-label").textContent =
+    "Esercizio " + (currentIndex + 1) + " di " + exercises.length;
+}
+
+/* ================================================================
+   RENDERING
+================================================================ */
+function renderExercise() {
+  answered = false;
+  updateProgress();
+
+  const ex   = exercises[currentIndex];
+  const card = document.getElementById("exercise-card");
+
+  const isLast      = currentIndex >= exercises.length - 1;
+  const nextLabel   = isLast ? "Vedi risultati 🏆" : "Avanti ▶";
+
+  let html = "";
+
+  if (ex.type === 1) {
+    // ── TYPE 1 ──────────────────────────────────────────────────
+    html = `
+      <div class="exercise-question">🤔 È un prezzo ragionevole?</div>
+      <div class="product-display">
+        <span class="product-emoji-large">${ex.product.emoji}</span>
+        <div class="product-name-label">${ex.product.name}</div>
+      </div>
+      <div class="price-big">${fmt(ex.displayPrice)}</div>
+      <div class="yesno-buttons">
+        <button class="btn btn-si" id="btn-si" onclick="answerYesNo(true)">✅ SÌ</button>
+        <button class="btn btn-no" id="btn-no" onclick="answerYesNo(false)">❌ NO</button>
+      </div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+
+  } else if (ex.type === 2) {
+    // ── TYPE 2 ──────────────────────────────────────────────────
+    const optHtml = ex.options.map((opt, i) => `
+      <button class="btn-option" id="opt-${i}" onclick="answerOption(${i})">${opt.label}</button>
+    `).join("");
+
+    html = `
+      <div class="exercise-question">💶 Quale prezzo potrebbe avere?</div>
+      <div class="product-display">
+        <span class="product-emoji-large">${ex.product.emoji}</span>
+        <div class="product-name-label">${ex.product.name}</div>
+      </div>
+      <div class="options-list">${optHtml}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+
+  } else {
+    // ── TYPE 3 ──────────────────────────────────────────────────
+    const optHtml = ex.options.map((opt, i) => `
+      <button class="btn-option" id="opt-${i}" onclick="answerOption(${i})">
+        <span class="option-emoji">${opt.product.emoji}</span>${opt.product.name}
+      </button>
+    `).join("");
+
+    html = `
+      <div class="exercise-question">🛒 Con questo prezzo, cosa posso comprare?</div>
+      <div class="price-big">${fmt(ex.product.price)}</div>
+      <div class="options-list">${optHtml}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+  }
+
+  card.innerHTML = html;
+
+  // Entrance animation: remove class, force a reflow so the browser
+  // registers the removal before re-adding it, then re-add to replay.
+  card.classList.remove("pop");
+  /* eslint-disable-next-line no-unused-expressions */
+  card.offsetWidth; // trigger reflow to reset the CSS animation
+  card.classList.add("pop");
+}
+
+/* ================================================================
+   ANSWER HANDLERS
+================================================================ */
+function answerYesNo(userAnswer) {
+  if (answered) return;
+  answered = true;
+
+  const ex        = exercises[currentIndex];
+  const isCorrect = (userAnswer === ex.isReasonable);
+  if (isCorrect) score++;
+
+  const btnSi = document.getElementById("btn-si");
+  const btnNo = document.getElementById("btn-no");
+  btnSi.disabled = true;
+  btnNo.disabled = true;
+
+  // Outline the button the user pressed
+  (userAnswer ? btnSi : btnNo).style.outline =
+    isCorrect ? "4px solid #2e7d32" : "4px solid #b71c1c";
+
+  // When wrong, also highlight the correct button in green
+  if (!isCorrect) {
+    (ex.isReasonable ? btnSi : btnNo).style.outline = "4px solid #2e7d32";
+  }
+
+  showFeedback(isCorrect, ex);
+}
+
+function answerOption(index) {
+  if (answered) return;
+  answered = true;
+
+  const ex             = exercises[currentIndex];
+  const selectedOption = ex.options[index];
+  const isCorrect      = selectedOption.isCorrect;
+  if (isCorrect) score++;
+
+  // Mark all options as answered, highlight correct / wrong
+  ex.options.forEach((opt, i) => {
+    const btn = document.getElementById("opt-" + i);
+    btn.classList.add("answered");
+    btn.onclick = null;
+    if (opt.isCorrect) btn.classList.add("correct");
+    else if (i === index) btn.classList.add("wrong");
+  });
+
+  showFeedback(isCorrect, ex);
+}
+
+/* ================================================================
+   FEEDBACK
+================================================================ */
+function showFeedback(isCorrect, ex) {
+  const fb      = document.getElementById("feedback");
+  const nextBtn = document.getElementById("btn-next");
+
+  if (isCorrect) {
+    fb.className = "feedback-box show correct-fb";
+    fb.innerHTML = "✅ Bravo! Risposta corretta! 🎉";
+  } else {
+    let hint = "";
+    if (ex.type === 1 || ex.type === 2) {
+      hint = `<strong>${ex.product.name}</strong> costa di solito <strong>${fmt(ex.product.price)}</strong>.`;
+    } else {
+      hint = `Con <strong>${fmt(ex.product.price)}</strong> si compra di solito <strong>${ex.product.name}</strong>.`;
+    }
+    fb.className = "feedback-box show wrong-fb";
+    fb.innerHTML = `❌ Non è corretto. ${hint}`;
+  }
+
+  nextBtn.className = "btn-next show";
+}
+
+/* ================================================================
+   RESULTS
+================================================================ */
+function showResults() {
+  showScreen("screen-results");
+
+  let icon, msg;
+  if      (score >= 9) { icon = "🌟🌟🌟"; msg = "Eccellente! Sei un esperto dei prezzi! 🏆";           }
+  else if (score >= 7) { icon = "🌟🌟";    msg = "Molto bravo! Stai imparando benissimo! 😊";           }
+  else if (score >= 5) { icon = "🌟";      msg = "Buon lavoro! Continua ad esercitarti! 💪";            }
+  else if (score >= 0) { icon = "📚";      msg = "Riprova! Con la pratica imparerai tutto! 🤗"; }
+
+  document.getElementById("results-icon").textContent = icon;
+  document.getElementById("score-big").textContent    = score;
+  document.getElementById("result-msg").textContent   = msg;
+
+  // Pop animation on the score number: force reflow to reset animation
+  const el = document.getElementById("score-big");
+  el.classList.remove("pop");
+  el.offsetWidth; // trigger reflow to reset the CSS animation
+  el.classList.add("pop");
+}
+</script>
+</body>
+</html>
