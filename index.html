@@ -359,6 +359,9 @@
     }
     .price-input:focus    { border-color: #5c6bc0; }
     .price-input:disabled { background: #f5f5f5; }
+    .price-input.input-error   { border-color: #ef5350; }
+    .price-input.input-correct { border-color: #4caf50; }
+    .price-input.input-wrong   { border-color: #ef5350; }
     .btn-confirm {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
@@ -893,7 +896,7 @@ function makeType4(product) {
 }
 
 /* ================================================================
-   EXERCISE GENERATION (10 total: 3 × type1, 2 × type2, 2 × type3, 3 × type4)
+   EXERCISE GENERATION (10 total: 3 × type1, 3 × type2, 2 × type3, 2 × type4)
 ================================================================ */
 function generateExercises() {
   const typeSeq      = shuffle([1, 1, 1, 2, 2, 2, 3, 3, 4, 4]);
@@ -1113,7 +1116,7 @@ function answerType4() {
   const val   = parseFloat(raw);
 
   if (isNaN(val) || val < 0) {
-    input.style.borderColor = "#ef5350";
+    input.classList.add("input-error");
     input.focus();
     return;
   }
@@ -1126,7 +1129,8 @@ function answerType4() {
 
   document.getElementById("btn-confirm").disabled = true;
   input.disabled = true;
-  input.style.borderColor = isCorrect ? "#4caf50" : "#ef5350";
+  input.classList.remove("input-error");
+  input.classList.add(isCorrect ? "input-correct" : "input-wrong");
 
   showFeedback(isCorrect, ex, val);
 }
