@@ -331,6 +331,179 @@
     }
     .pop { animation: popIn 0.45s ease; }
 
+    /* ===== TYPE 4 – PRICE TEXT INPUT ===== */
+    .price-input-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 18px 0;
+      flex-wrap: wrap;
+    }
+    .price-input-prefix {
+      font-size: 2em;
+      font-weight: 900;
+      color: #5c6bc0;
+    }
+    .price-input {
+      font-size: 2em;
+      font-weight: 700;
+      color: #2c3e50;
+      border: 3px solid #c5cae9;
+      border-radius: 14px;
+      padding: 10px 18px;
+      width: 160px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .price-input:focus    { border-color: #5c6bc0; }
+    .price-input:disabled { background: #f5f5f5; }
+    .price-input.input-error   { border-color: #ef5350; }
+    .price-input.input-correct { border-color: #4caf50; }
+    .price-input.input-wrong   { border-color: #ef5350; }
+    .btn-confirm {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      min-width: 130px;
+      box-shadow: 0 5px 18px rgba(102,126,234,0.4);
+    }
+
+    /* ===== PRINT SECTION (intro screen) ===== */
+    .print-section {
+      border-top: 2px dashed #d5d5d5;
+      margin-top: 24px;
+      padding-top: 20px;
+    }
+    .print-label {
+      font-size: 1.05em;
+      color: #555;
+      text-align: center;
+      display: block;
+      margin-bottom: 14px;
+    }
+    .print-count-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .print-count-input {
+      font-size: 1.3em;
+      font-weight: 700;
+      border: 3px solid #c5cae9;
+      border-radius: 14px;
+      padding: 10px 16px;
+      width: 90px;
+      text-align: center;
+      color: #2c3e50;
+      outline: none;
+    }
+    .print-count-input:focus { border-color: #5c6bc0; }
+    .btn-print-start {
+      background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+      color: #fff;
+      padding: 14px 30px;
+      font-size: 1.1em;
+      font-weight: 800;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(67,160,71,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-print-start:hover  { transform: translateY(-3px); }
+    .btn-print-start:active { transform: scale(0.96); }
+
+    /* ===== PRINT CONTAINER (hidden on screen, visible when printing) ===== */
+    #print-container { display: none; }
+
+    @media print {
+      body {
+        background: white !important;
+        padding: 0 !important;
+        min-height: unset !important;
+        display: block !important;
+        align-items: unset !important;
+        justify-content: unset !important;
+      }
+      .container { display: none !important; }
+      #print-container {
+        display: block !important;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #000;
+        font-size: 10pt;
+        padding: 0;
+        margin: 0;
+      }
+      .print-page-header {
+        text-align: center;
+        border-bottom: 2pt solid #000;
+        padding-bottom: 8pt;
+        margin-bottom: 14pt;
+      }
+      .print-page-header h1 { font-size: 16pt; margin: 0; }
+      .print-page-header p  { font-size: 9pt; color: #555; margin: 3pt 0 0; }
+      .print-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6mm;
+      }
+      .print-ex {
+        border: 1.5pt solid #333;
+        border-radius: 5pt;
+        padding: 8pt 10pt;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .print-ex-num   { font-size: 7.5pt; font-weight: 800; color: #666; text-transform: uppercase; margin-bottom: 3pt; }
+      .print-ex-q     { font-size: 9pt; font-weight: 700; margin-bottom: 5pt; }
+      .print-ex-product { display: flex; align-items: center; gap: 5pt; margin-bottom: 4pt; }
+      .print-ex-emoji { font-size: 18pt; line-height: 1; }
+      .print-ex-pname { font-size: 11pt; font-weight: 700; }
+      .print-ex-price-big { font-size: 16pt; font-weight: 900; text-align: center; margin: 4pt 0; }
+      .print-yesno {
+        display: flex;
+        gap: 20pt;
+        margin-top: 5pt;
+        justify-content: center;
+      }
+      .print-yesno span { display: flex; align-items: center; gap: 4pt; font-size: 10pt; font-weight: 700; }
+      .print-circle {
+        display: inline-block;
+        width: 10pt;
+        height: 10pt;
+        border: 1.5pt solid #333;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .print-ex-opts { list-style: none; padding: 0; margin: 4pt 0 0; }
+      .print-ex-opts li { font-size: 9.5pt; margin: 3pt 0; display: flex; align-items: center; gap: 4pt; }
+      .print-opt-emoji { font-size: 12pt; }
+      .print-blank-row { margin-top: 8pt; font-size: 10pt; }
+      .print-blank { display: inline-block; border-bottom: 1.5pt solid #333; width: 120pt; height: 12pt; vertical-align: bottom; }
+      .print-answer-key {
+        break-before: page;
+        page-break-before: always;
+        border-top: 2pt solid #000;
+        padding-top: 10pt;
+      }
+      .print-answer-key h2 { font-size: 12pt; margin: 0 0 8pt; }
+      .print-answer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4pt;
+      }
+      .print-answer-item {
+        font-size: 8.5pt;
+        border: 1pt solid #ccc;
+        border-radius: 3pt;
+        padding: 3pt 5pt;
+      }
+      .print-answer-item .ans-num { font-weight: 800; color: #444; }
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 520px) {
       body { padding: 12px; }
@@ -391,6 +564,15 @@
       <div class="center-btn">
         <button class="btn-start" onclick="startGame()">Inizia gli esercizi ▶</button>
       </div>
+
+      <div class="print-section">
+        <div class="section-heading">🖨️ Stampa su carta</div>
+        <label class="print-label">Quanti esercizi vuoi stampare?</label>
+        <div class="print-count-row">
+          <input type="number" id="print-count" class="print-count-input" value="10" min="1" max="60">
+          <button class="btn-print-start" onclick="printExercises()">🖨️ Stampa PDF</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -416,7 +598,7 @@
     <div class="card">
       <div class="results-icon" id="results-icon">🌟</div>
       <div class="score-big" id="score-big">0</div>
-      <div class="score-sub">risposte corrette su 10</div>
+      <div class="score-sub" id="score-sub">risposte corrette su 10</div>
       <div class="result-msg" id="result-msg">Ottimo lavoro!</div>
       <div class="center-btn">
         <button class="btn-start" onclick="restartGame()">🔄 Gioca ancora!</button>
@@ -425,6 +607,8 @@
   </div>
 
 </div><!-- .container -->
+
+<div id="print-container"></div>
 
 <script>
 /* ================================================================
@@ -704,17 +888,25 @@ function makeType3(product) {
   return { type: 3, product, options };
 }
 
+/**
+ * TYPE 4 – product shown → user types a price to check against the reasonable range
+ */
+function makeType4(product) {
+  return { type: 4, product };
+}
+
 /* ================================================================
-   EXERCISE GENERATION (10 total: 4 × type1, 3 × type2, 3 × type3)
+   EXERCISE GENERATION (10 total: 3 × type1, 3 × type2, 2 × type3, 2 × type4)
 ================================================================ */
 function generateExercises() {
-  const typeSeq      = shuffle([1, 1, 1, 1, 2, 2, 2, 3, 3, 3]);
+  const typeSeq      = shuffle([1, 1, 1, 2, 2, 2, 3, 3, 4, 4]);
   const productPool  = shuffle(PRODUCTS);
   return typeSeq.map((type, i) => {
     const product = productPool[i % productPool.length];
     return type === 1 ? makeType1(product)
          : type === 2 ? makeType2(product)
-                      : makeType3(product);
+         : type === 3 ? makeType3(product)
+                      : makeType4(product);
   });
 }
 
@@ -814,7 +1006,7 @@ function renderExercise() {
         <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
       </div>`;
 
-  } else {
+  } else if (ex.type === 3) {
     // ── TYPE 3 ──────────────────────────────────────────────────
     const optHtml = ex.options.map((opt, i) => `
       <button class="btn-option" id="opt-${i}" onclick="answerOption(${i})">
@@ -830,6 +1022,26 @@ function renderExercise() {
       <div class="next-wrap">
         <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
       </div>`;
+
+  } else {
+    // ── TYPE 4 ──────────────────────────────────────────────────
+    html = `
+      <div class="exercise-question">✏️ Qual è un prezzo ragionevole?</div>
+      <div class="product-display">
+        <span class="product-emoji-large">${ex.product.emoji}</span>
+        <div class="product-name-label">${ex.product.name}</div>
+      </div>
+      <div class="price-input-wrap">
+        <span class="price-input-prefix">€</span>
+        <input type="text" id="price-input" class="price-input" placeholder="0,00"
+               inputmode="decimal"
+               onkeydown="if(event.key==='Enter')answerType4()">
+        <button class="btn btn-confirm" id="btn-confirm" onclick="answerType4()">Conferma ✓</button>
+      </div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
   }
 
   card.innerHTML = html;
@@ -840,6 +1052,11 @@ function renderExercise() {
   /* eslint-disable-next-line no-unused-expressions */
   card.offsetWidth; // trigger reflow to reset the CSS animation
   card.classList.add("pop");
+
+  if (ex.type === 4) {
+    const inp = document.getElementById("price-input");
+    if (inp) setTimeout(() => inp.focus(), 50);
+  }
 }
 
 /* ================================================================
@@ -891,6 +1108,33 @@ function answerOption(index) {
   showFeedback(isCorrect, ex);
 }
 
+function answerType4() {
+  if (answered) return;
+
+  const input = document.getElementById("price-input");
+  const raw   = input.value.trim().replace(",", ".");
+  const val   = parseFloat(raw);
+
+  if (isNaN(val) || val < 0) {
+    input.classList.add("input-error");
+    input.focus();
+    return;
+  }
+
+  answered = true;
+
+  const ex        = exercises[currentIndex];
+  const isCorrect = val >= ex.product.priceRange.min && val <= ex.product.priceRange.max;
+  if (isCorrect) score++;
+
+  document.getElementById("btn-confirm").disabled = true;
+  input.disabled = true;
+  input.classList.remove("input-error");
+  input.classList.add(isCorrect ? "input-correct" : "input-wrong");
+
+  showFeedback(isCorrect, ex, val);
+}
+
 /* ================================================================
    FEEDBACK
 ================================================================ */
@@ -899,20 +1143,27 @@ function priceRangeHint(product) {
   return `💡 Prezzo tipico di <strong>${product.name}</strong>: da <strong>${fmt(r.min)}</strong> a <strong>${fmt(r.max)}</strong>.`;
 }
 
-function showFeedback(isCorrect, ex) {
+function showFeedback(isCorrect, ex, userVal = null) {
   const fb      = document.getElementById("feedback");
   const nextBtn = document.getElementById("btn-next");
   const rangeHint = priceRangeHint(ex.product);
 
   if (isCorrect) {
+    let correctMsg = "✅ Bravo! Risposta corretta! 🎉";
+    if (ex.type === 4 && userVal !== null) {
+      correctMsg = `✅ Bravo! ${fmt(userVal)} è un prezzo ragionevole! 🎉`;
+    }
     fb.className = "feedback-box show correct-fb";
-    fb.innerHTML = `✅ Bravo! Risposta corretta! 🎉<br><small style="font-weight:500">${rangeHint}</small>`;
+    fb.innerHTML = `${correctMsg}<br><small style="font-weight:500">${rangeHint}</small>`;
   } else {
     let hint = "";
     if (ex.type === 1 || ex.type === 2) {
       hint = `<strong>${ex.product.name}</strong> costa di solito <strong>${fmt(ex.product.price)}</strong>.`;
-    } else {
+    } else if (ex.type === 3) {
       hint = `Con <strong>${fmt(ex.product.price)}</strong> si compra di solito <strong>${ex.product.name}</strong>.`;
+    } else {
+      const r = ex.product.priceRange;
+      hint = `Un prezzo ragionevole per <strong>${ex.product.name}</strong> è tra <strong>${fmt(r.min)}</strong> e <strong>${fmt(r.max)}</strong>.`;
     }
     fb.className = "feedback-box show wrong-fb";
     fb.innerHTML = `❌ Non è corretto. ${hint}<br><small style="font-weight:500">${rangeHint}</small>`;
@@ -927,14 +1178,17 @@ function showFeedback(isCorrect, ex) {
 function showResults() {
   showScreen("screen-results");
 
+  const total = exercises.length;
   let icon, msg;
-  if      (score >= 9) { icon = "🌟🌟🌟"; msg = "Eccellente! Sei un esperto dei prezzi! 🏆";           }
-  else if (score >= 7) { icon = "🌟🌟";    msg = "Molto bravo! Stai imparando benissimo! 😊";           }
-  else if (score >= 5) { icon = "🌟";      msg = "Buon lavoro! Continua ad esercitarti! 💪";            }
-  else if (score >= 0) { icon = "📚";      msg = "Riprova! Con la pratica imparerai tutto! 🤗"; }
+  const pct = score / total;
+  if      (pct >= 0.9) { icon = "🌟🌟🌟"; msg = "Eccellente! Sei un esperto dei prezzi! 🏆";           }
+  else if (pct >= 0.7) { icon = "🌟🌟";    msg = "Molto bravo! Stai imparando benissimo! 😊";           }
+  else if (pct >= 0.5) { icon = "🌟";      msg = "Buon lavoro! Continua ad esercitarti! 💪";            }
+  else                 { icon = "📚";      msg = "Riprova! Con la pratica imparerai tutto! 🤗"; }
 
   document.getElementById("results-icon").textContent = icon;
   document.getElementById("score-big").textContent    = score;
+  document.getElementById("score-sub").textContent    = `risposte corrette su ${total}`;
   document.getElementById("result-msg").textContent   = msg;
 
   // Pop animation on the score number: force reflow to reset animation
@@ -942,6 +1196,124 @@ function showResults() {
   el.classList.remove("pop");
   el.offsetWidth; // trigger reflow to reset the CSS animation
   el.classList.add("pop");
+}
+
+/* ================================================================
+   PRINT MODE
+================================================================ */
+function generatePrintExercises(count) {
+  const baseTypes = [1, 2, 3, 4];
+  let typeSeq = [];
+  while (typeSeq.length < count) {
+    typeSeq = typeSeq.concat(shuffle([...baseTypes]));
+  }
+  typeSeq = typeSeq.slice(0, count);
+
+  const productPool = shuffle(PRODUCTS);
+  return typeSeq.map((type, i) => {
+    const product = productPool[i % productPool.length];
+    if (type === 1) return makeType1(product);
+    if (type === 2) return makeType2(product);
+    if (type === 3) return makeType3(product);
+    return makeType4(product);
+  });
+}
+
+function renderPrintExercise(ex, num) {
+  let content = "";
+
+  if (ex.type === 1) {
+    content = `
+      <div class="print-ex-q">🤔 È un prezzo ragionevole?</div>
+      <div class="print-ex-product">
+        <span class="print-ex-emoji">${ex.product.emoji}</span>
+        <span class="print-ex-pname">${ex.product.name}</span>
+      </div>
+      <div class="print-ex-price-big">${fmt(ex.displayPrice)}</div>
+      <div class="print-yesno">
+        <span><span class="print-circle"></span> SÌ</span>
+        <span><span class="print-circle"></span> NO</span>
+      </div>`;
+
+  } else if (ex.type === 2) {
+    const letters = ["A", "B", "C"];
+    const optsHtml = ex.options.map((opt, i) =>
+      `<li><span class="print-circle"></span> ${letters[i]}) ${opt.label}</li>`
+    ).join("");
+    content = `
+      <div class="print-ex-q">💶 Quale prezzo potrebbe avere?</div>
+      <div class="print-ex-product">
+        <span class="print-ex-emoji">${ex.product.emoji}</span>
+        <span class="print-ex-pname">${ex.product.name}</span>
+      </div>
+      <ul class="print-ex-opts">${optsHtml}</ul>`;
+
+  } else if (ex.type === 3) {
+    const letters = ["A", "B", "C"];
+    const optsHtml = ex.options.map((opt, i) =>
+      `<li><span class="print-circle"></span> ${letters[i]}) <span class="print-opt-emoji">${opt.product.emoji}</span> ${opt.product.name}</li>`
+    ).join("");
+    content = `
+      <div class="print-ex-q">🛒 Con questo prezzo, cosa posso comprare?</div>
+      <div class="print-ex-price-big">${fmt(ex.product.price)}</div>
+      <ul class="print-ex-opts">${optsHtml}</ul>`;
+
+  } else {
+    content = `
+      <div class="print-ex-q">✏️ Scrivi un prezzo ragionevole:</div>
+      <div class="print-ex-product">
+        <span class="print-ex-emoji">${ex.product.emoji}</span>
+        <span class="print-ex-pname">${ex.product.name}</span>
+      </div>
+      <div class="print-blank-row">€ <span class="print-blank"></span></div>`;
+  }
+
+  return `
+    <div class="print-ex">
+      <div class="print-ex-num">Esercizio ${num}</div>
+      ${content}
+    </div>`;
+}
+
+function printExercises() {
+  const countInput = document.getElementById("print-count");
+  const count = Math.max(1, Math.min(60, parseInt(countInput.value, 10) || 10));
+  countInput.value = count;
+
+  const exs = generatePrintExercises(count);
+
+  const exercisesHtml = exs.map((ex, i) => renderPrintExercise(ex, i + 1)).join("");
+
+  const answersHtml = exs.map((ex, i) => {
+    let ans = "";
+    if (ex.type === 1) {
+      ans = ex.isReasonable ? "SÌ" : "NO";
+    } else if (ex.type === 2) {
+      const correct = ex.options.find(o => o.isCorrect);
+      ans = correct ? correct.label : "—";
+    } else if (ex.type === 3) {
+      const correct = ex.options.find(o => o.isCorrect);
+      ans = correct ? `${correct.product.emoji} ${correct.product.name}` : "—";
+    } else {
+      ans = `${fmt(ex.product.priceRange.min)} – ${fmt(ex.product.priceRange.max)}`;
+    }
+    return `<div class="print-answer-item"><span class="ans-num">${i + 1}.</span> ${ans}</div>`;
+  }).join("");
+
+  const container = document.getElementById("print-container");
+  container.innerHTML = `
+    <div class="print-page-header">
+      <h1>💰 Il Valore dei Soldi – Scheda Esercizi</h1>
+      <p>Nome: _________________________ &nbsp;&nbsp; Data: _______________ &nbsp;&nbsp; Classe: ________</p>
+    </div>
+    <div class="print-grid">${exercisesHtml}</div>
+    <div class="print-answer-key">
+      <h2>🗝️ Soluzioni</h2>
+      <div class="print-answer-grid">${answersHtml}</div>
+    </div>
+  `;
+
+  window.print();
 }
 </script>
 </body>
