@@ -331,6 +331,14 @@
     }
     .pop { animation: popIn 0.45s ease; }
 
+    /* ===== TYPE 6 & 7 – CATEGORY BUTTONS ===== */
+    .btn-cat-basso { border-color: #66bb6a !important; color: #2e7d32 !important; }
+    .btn-cat-medio { border-color: #ffa726 !important; color: #e65100 !important; }
+    .btn-cat-alto  { border-color: #ef5350 !important; color: #b71c1c !important; }
+    .btn-cat-basso:not(.answered):hover { background: #e8f5e9 !important; border-color: #43a047 !important; }
+    .btn-cat-medio:not(.answered):hover { background: #fff8e1 !important; border-color: #fb8c00 !important; }
+    .btn-cat-alto:not(.answered):hover  { background: #fce4ec !important; border-color: #e53935 !important; }
+
     /* ===== TYPE 5 – CHEAPER COMPARISON ===== */
     .cheaper-grid {
       display: grid;
@@ -665,6 +673,8 @@
           <button class="btn-type-toggle active" data-type="3" onclick="toggleType(this,'game')">🛒 Cosa compro?</button>
           <button class="btn-type-toggle active" data-type="4" onclick="toggleType(this,'game')">✏️ Scrivi il prezzo</button>
           <button class="btn-type-toggle active" data-type="5" onclick="toggleType(this,'game')">⚖️ Quale costa meno?</button>
+          <button class="btn-type-toggle active" data-type="6" onclick="toggleType(this,'game')">💰 Quale costa di più?</button>
+          <button class="btn-type-toggle active" data-type="7" onclick="toggleType(this,'game')">🏷️ Quale categoria?</button>
         </div>
       </div>
 
@@ -685,6 +695,8 @@
           <button class="btn-type-toggle active" data-type="3" onclick="toggleType(this,'print')">🛒 Cosa compro?</button>
           <button class="btn-type-toggle active" data-type="4" onclick="toggleType(this,'print')">✏️ Scrivi il prezzo</button>
           <button class="btn-type-toggle active" data-type="5" onclick="toggleType(this,'print')">⚖️ Quale costa meno?</button>
+          <button class="btn-type-toggle active" data-type="6" onclick="toggleType(this,'print')">💰 Quale costa di più?</button>
+          <button class="btn-type-toggle active" data-type="7" onclick="toggleType(this,'print')">🏷️ Quale categoria?</button>
         </div>
         <div class="print-count-row">
           <button class="btn-print-start" onclick="printExercises()">🖨️ Stampa PDF</button>
@@ -1025,9 +1037,29 @@ function makeType5() {
   return { type: 5, options: [p1, p2], cheaperIndex };
 }
 
-/* ================================================================
-   EXERCISE GENERATION
-================================================================ */
+/**
+ * TYPE 6 – two products shown → pick the one that costs more
+ *   Products are drawn from two different price categories so there is
+ *   always a clear correct answer.
+ */
+function makeType6() {
+  const [cat1, cat2] = shuffle(["basso", "medio", "alto"]).slice(0, 2);
+  const p1 = randByCat(cat1);
+  const p2 = randByCat(cat2);
+  const moreExpensiveIndex = p1.price >= p2.price ? 0 : 1;
+  return { type: 6, options: [p1, p2], moreExpensiveIndex };
+}
+
+/**
+ * TYPE 7 – product shown → pick the correct price category (basso / medio / alto)
+ */
+function makeType7(product) {
+  const cats = shuffle(["basso", "medio", "alto"]);
+  const options = cats.map(cat => ({ cat, isCorrect: cat === product.category }));
+  return { type: 7, product, options };
+}
+
+
 /**
  * Generate `count` exercises using the given type list.
  * Types are cycled in shuffled order until the count is reached.
@@ -1042,10 +1074,12 @@ function generateExercises(count, types) {
   const productPool = shuffle(PRODUCTS);
   return typeSeq.map((type, i) => {
     if (type === 5) return makeType5();
+    if (type === 6) return makeType6();
     const product = productPool[i % productPool.length];
     return type === 1 ? makeType1(product)
          : type === 2 ? makeType2(product)
          : type === 3 ? makeType3(product)
+         : type === 7 ? makeType7(product)
                       : makeType4(product);
   });
 }
@@ -1183,6 +1217,47 @@ function renderExercise() {
         <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
       </div>`;
 
+  } else if (ex.type === 6) {
+    // ── TYPE 6 ──────────────────────────────────────────────────
+    const optsHtml = ex.options.map((opt, i) => `
+      <button class="btn-cheaper" id="cheaper-${i}" onclick="answerMoreExpensive(${i})">
+        <span class="btn-cheaper-emoji">${opt.emoji}</span>
+        <span class="btn-cheaper-name">${opt.name}</span>
+      </button>
+    `).join("");
+
+    html = `
+      <div class="exercise-question">💰 Quale costa di più?</div>
+      <div class="cheaper-grid">${optsHtml}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+
+  } else if (ex.type === 7) {
+    // ── TYPE 7 ──────────────────────────────────────────────────
+    const catLabels = {
+      basso: { label: "💚 Basso", sub: "fino a €5" },
+      medio: { label: "🟡 Medio", sub: "€5 – €100" },
+      alto:  { label: "🔴 Alto",  sub: "oltre €100" }
+    };
+    const optsHtml = ex.options.map((opt, i) => {
+      const cl = catLabels[opt.cat];
+      return `<button class="btn-option btn-cat-${opt.cat}" id="catopt-${i}" onclick="answerCategory(${i})">${cl.label}<br><small style="font-weight:500">${cl.sub}</small></button>`;
+    }).join("");
+
+    html = `
+      <div class="exercise-question">🏷️ A quale categoria di prezzo appartiene?</div>
+      <div class="product-display">
+        <span class="product-emoji-large">${ex.product.emoji}</span>
+        <div class="product-name-label">${ex.product.name}</div>
+      </div>
+      <div class="options-list">${optsHtml}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+
   } else {
     // ── TYPE 4 ──────────────────────────────────────────────────
     html = `
@@ -1314,6 +1389,44 @@ function answerCheaper(index) {
   showFeedback(isCorrect, ex);
 }
 
+function answerMoreExpensive(index) {
+  if (answered) return;
+  answered = true;
+
+  const ex        = exercises[currentIndex];
+  const isCorrect = index === ex.moreExpensiveIndex;
+  if (isCorrect) score++;
+
+  ex.options.forEach((opt, i) => {
+    const btn = document.getElementById("cheaper-" + i);
+    btn.classList.add("answered");
+    btn.onclick = null;
+    if (i === ex.moreExpensiveIndex) btn.classList.add("correct");
+    else if (i === index)            btn.classList.add("wrong");
+  });
+
+  showFeedback(isCorrect, ex);
+}
+
+function answerCategory(index) {
+  if (answered) return;
+  answered = true;
+
+  const ex        = exercises[currentIndex];
+  const isCorrect = ex.options[index].isCorrect;
+  if (isCorrect) score++;
+
+  ex.options.forEach((opt, i) => {
+    const btn = document.getElementById("catopt-" + i);
+    btn.classList.add("answered");
+    btn.onclick = null;
+    if (opt.isCorrect)  btn.classList.add("correct");
+    else if (i === index) btn.classList.add("wrong");
+  });
+
+  showFeedback(isCorrect, ex);
+}
+
 /* ================================================================
    FEEDBACK
 ================================================================ */
@@ -1325,7 +1438,7 @@ function priceRangeHint(product) {
 function showFeedback(isCorrect, ex, userVal = null) {
   const fb      = document.getElementById("feedback");
   const nextBtn = document.getElementById("btn-next");
-  const rangeHint = ex.type !== 5 ? priceRangeHint(ex.product) : "";
+  const rangeHint = (ex.type !== 5 && ex.type !== 6) ? priceRangeHint(ex.product) : "";
   const hintLine  = rangeHint ? `<br><small style="font-weight:500">${rangeHint}</small>` : "";
 
   if (isCorrect) {
@@ -1336,6 +1449,13 @@ function showFeedback(isCorrect, ex, userVal = null) {
       const cheaper = ex.options[ex.cheaperIndex];
       const pricier = ex.options[1 - ex.cheaperIndex];
       correctMsg = `✅ Bravo! <strong>${cheaper.emoji} ${cheaper.name}</strong> costa <strong>${fmt(cheaper.price)}</strong>, meno di <strong>${pricier.emoji} ${pricier.name}</strong> (${fmt(pricier.price)}). 🎉`;
+    } else if (ex.type === 6) {
+      const expensive = ex.options[ex.moreExpensiveIndex];
+      const cheaper   = ex.options[1 - ex.moreExpensiveIndex];
+      correctMsg = `✅ Bravo! <strong>${expensive.emoji} ${expensive.name}</strong> costa <strong>${fmt(expensive.price)}</strong>, più di <strong>${cheaper.emoji} ${cheaper.name}</strong> (${fmt(cheaper.price)}). 🎉`;
+    } else if (ex.type === 7) {
+      const catName = ex.product.category === "basso" ? "💚 Basso" : ex.product.category === "medio" ? "🟡 Medio" : "🔴 Alto";
+      correctMsg = `✅ Bravo! <strong>${ex.product.emoji} ${ex.product.name}</strong> appartiene alla categoria <strong>${catName}</strong>! 🎉`;
     }
     fb.className = "feedback-box show correct-fb";
     fb.innerHTML = `${correctMsg}${hintLine}`;
@@ -1348,10 +1468,17 @@ function showFeedback(isCorrect, ex, userVal = null) {
     } else if (ex.type === 4) {
       const r = ex.product.priceRange;
       hint = `Un prezzo ragionevole per <strong>${ex.product.name}</strong> è tra <strong>${fmt(r.min)}</strong> e <strong>${fmt(r.max)}</strong>.`;
-    } else {
+    } else if (ex.type === 5) {
       const cheaper = ex.options[ex.cheaperIndex];
       const pricier = ex.options[1 - ex.cheaperIndex];
       hint = `<strong>${cheaper.emoji} ${cheaper.name}</strong> costa <strong>${fmt(cheaper.price)}</strong>, meno di <strong>${pricier.emoji} ${pricier.name}</strong> (${fmt(pricier.price)}).`;
+    } else if (ex.type === 6) {
+      const expensive = ex.options[ex.moreExpensiveIndex];
+      const cheaper   = ex.options[1 - ex.moreExpensiveIndex];
+      hint = `<strong>${expensive.emoji} ${expensive.name}</strong> costa <strong>${fmt(expensive.price)}</strong>, più di <strong>${cheaper.emoji} ${cheaper.name}</strong> (${fmt(cheaper.price)}).`;
+    } else {
+      const catName = ex.product.category === "basso" ? "💚 Basso (fino a €5)" : ex.product.category === "medio" ? "🟡 Medio (€5–€100)" : "🔴 Alto (oltre €100)";
+      hint = `<strong>${ex.product.emoji} ${ex.product.name}</strong> costa <strong>${fmt(ex.product.price)}</strong> e appartiene alla categoria <strong>${catName}</strong>.`;
     }
     fb.className = "feedback-box show wrong-fb";
     fb.innerHTML = `❌ Non è corretto. ${hint}${hintLine}`;
@@ -1441,7 +1568,7 @@ function renderPrintExercise(ex, num) {
       </div>
       <div class="print-blank-row">€ <span class="print-blank"></span></div>`;
 
-  } else {
+  } else if (ex.type === 5) {
     const itemsHtml = ex.options.map((opt, i) => `
       <div class="print-cheaper-item">
         <div class="print-cheaper-emoji">${opt.emoji}</div>
@@ -1452,6 +1579,31 @@ function renderPrintExercise(ex, num) {
     content = `
       <div class="print-ex-q">⚖️ Quale costa meno? (cerchia la risposta)</div>
       <div class="print-cheaper-grid">${itemsHtml}</div>`;
+
+  } else if (ex.type === 6) {
+    const itemsHtml = ex.options.map((opt, i) => `
+      <div class="print-cheaper-item">
+        <div class="print-cheaper-emoji">${opt.emoji}</div>
+        <div class="print-cheaper-name">${opt.name}</div>
+        <div class="print-cheaper-circle"><span class="print-circle"></span> ${String.fromCharCode(65 + i)})</div>
+      </div>`
+    ).join("");
+    content = `
+      <div class="print-ex-q">💰 Quale costa di più? (cerchia la risposta)</div>
+      <div class="print-cheaper-grid">${itemsHtml}</div>`;
+
+  } else {
+    content = `
+      <div class="print-ex-q">🏷️ A quale categoria appartiene?</div>
+      <div class="print-ex-product">
+        <span class="print-ex-emoji">${ex.product.emoji}</span>
+        <span class="print-ex-pname">${ex.product.name}</span>
+      </div>
+      <ul class="print-ex-opts">
+        <li><span class="print-circle"></span> 💚 Basso (fino a €5)</li>
+        <li><span class="print-circle"></span> 🟡 Medio (€5 – €100)</li>
+        <li><span class="print-circle"></span> 🔴 Alto (oltre €100)</li>
+      </ul>`;
   }
 
   return `
@@ -1483,9 +1635,15 @@ function printExercises() {
       ans = correct ? `${correct.product.emoji} ${correct.product.name}` : "—";
     } else if (ex.type === 4) {
       ans = `${fmt(ex.product.priceRange.min)} – ${fmt(ex.product.priceRange.max)}`;
-    } else {
+    } else if (ex.type === 5) {
       const cheaper = ex.options[ex.cheaperIndex];
       ans = `${cheaper.emoji} ${cheaper.name} (${fmt(cheaper.price)})`;
+    } else if (ex.type === 6) {
+      const expensive = ex.options[ex.moreExpensiveIndex];
+      ans = `${expensive.emoji} ${expensive.name} (${fmt(expensive.price)})`;
+    } else {
+      const cat = ex.product.category;
+      ans = cat === "basso" ? "💚 Basso" : cat === "medio" ? "🟡 Medio" : "🔴 Alto";
     }
     return `<div class="print-answer-item"><span class="ans-num">${i + 1}.</span> ${ans}</div>`;
   }).join("");
