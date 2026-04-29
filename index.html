@@ -432,24 +432,44 @@
 ================================================================ */
 const PRODUCTS = [
   // Basso (low) – typical price ≤ €5
-  { name: "Bottiglietta d'acqua",  emoji: "💧", price:   1.00, category: "basso" },
-  { name: "Caffè al bar",          emoji: "☕", price:   1.50, category: "basso" },
-  { name: "Gelato",                emoji: "🍦", price:   2.00, category: "basso" },
-  { name: "Panino",                emoji: "🥪", price:   3.00, category: "basso" },
-  { name: "Giornale",              emoji: "📰", price:   1.50, category: "basso" },
-  { name: "Cioccolatina",          emoji: "🍫", price:   1.00, category: "basso" },
+  { name: "Bottiglietta d'acqua",  emoji: "💧", price:   1.00, category: "basso", priceRange: { min: 0.80, max: 2.00  } },
+  { name: "Caffè al bar",          emoji: "☕", price:   1.50, category: "basso", priceRange: { min: 1.00, max: 2.00  } },
+  { name: "Gelato",                emoji: "🍦", price:   2.00, category: "basso", priceRange: { min: 1.50, max: 4.00  } },
+  { name: "Panino",                emoji: "🥪", price:   3.00, category: "basso", priceRange: { min: 2.00, max: 5.00  } },
+  { name: "Giornale",              emoji: "📰", price:   1.50, category: "basso", priceRange: { min: 1.00, max: 2.50  } },
+  { name: "Cioccolatina",          emoji: "🍫", price:   1.00, category: "basso", priceRange: { min: 0.50, max: 2.00  } },
+  { name: "Biglietto autobus",     emoji: "🚌", price:   1.50, category: "basso", priceRange: { min: 1.00, max: 2.50  } },
+  { name: "Succo di frutta",       emoji: "🧃", price:   1.50, category: "basso", priceRange: { min: 0.80, max: 2.50  } },
+  { name: "Penna",                 emoji: "✏️", price:   1.00, category: "basso", priceRange: { min: 0.50, max: 3.00  } },
+  { name: "Mela",                  emoji: "🍎", price:   0.50, category: "basso", priceRange: { min: 0.30, max: 1.00  } },
+  { name: "Caramella",             emoji: "🍬", price:   0.20, category: "basso", priceRange: { min: 0.10, max: 0.50  } },
+  { name: "Gomma per cancellare",  emoji: "🔖", price:   0.50, category: "basso", priceRange: { min: 0.30, max: 1.50  } },
   // Medio (medium) – €5–€100
-  { name: "Pizza",                 emoji: "🍕", price:   8.00, category: "medio" },
-  { name: "Biglietto cinema",      emoji: "🎬", price:  10.00, category: "medio" },
-  { name: "Libro",                 emoji: "📚", price:  15.00, category: "medio" },
-  { name: "Maglietta",             emoji: "👕", price:  20.00, category: "medio" },
-  { name: "Zaino scolastico",      emoji: "🎒", price:  30.00, category: "medio" },
-  { name: "Scarpe da ginnastica",  emoji: "👟", price:  60.00, category: "medio" },
+  { name: "Pizza",                 emoji: "🍕", price:   8.00, category: "medio", priceRange: { min: 5.00,  max: 15.00 } },
+  { name: "Biglietto cinema",      emoji: "🎬", price:  10.00, category: "medio", priceRange: { min: 7.00,  max: 15.00 } },
+  { name: "Libro",                 emoji: "📚", price:  15.00, category: "medio", priceRange: { min: 8.00,  max: 25.00 } },
+  { name: "Maglietta",             emoji: "👕", price:  20.00, category: "medio", priceRange: { min: 10.00, max: 40.00 } },
+  { name: "Zaino scolastico",      emoji: "🎒", price:  30.00, category: "medio", priceRange: { min: 15.00, max: 60.00 } },
+  { name: "Scarpe da ginnastica",  emoji: "👟", price:  60.00, category: "medio", priceRange: { min: 30.00, max: 100.00} },
+  { name: "Videogioco",            emoji: "🎮", price:  60.00, category: "medio", priceRange: { min: 15.00, max: 70.00 } },
+  { name: "Cuffie",                emoji: "🎧", price:  40.00, category: "medio", priceRange: { min: 15.00, max: 80.00 } },
+  { name: "Jeans",                 emoji: "👖", price:  50.00, category: "medio", priceRange: { min: 20.00, max: 90.00 } },
+  { name: "Pasto al ristorante",   emoji: "🍽️", price:  20.00, category: "medio", priceRange: { min: 10.00, max: 40.00 } },
+  { name: "Giocattolo",            emoji: "🧸", price:  20.00, category: "medio", priceRange: { min: 5.00,  max: 50.00 } },
+  { name: "Biglietto treno",       emoji: "🚆", price:  25.00, category: "medio", priceRange: { min: 5.00,  max: 80.00 } },
+  { name: "Occhiali da sole",      emoji: "🕶️", price:  30.00, category: "medio", priceRange: { min: 10.00, max: 80.00 } },
+  { name: "Profumo",               emoji: "🧴", price:  45.00, category: "medio", priceRange: { min: 15.00, max: 100.00} },
   // Alto (high) – > €100
-  { name: "Bicicletta",            emoji: "🚲", price: 200.00, category: "alto"  },
-  { name: "Smartphone",            emoji: "📱", price: 300.00, category: "alto"  },
-  { name: "Televisore",            emoji: "📺", price: 400.00, category: "alto"  },
-  { name: "Laptop",                emoji: "💻", price: 500.00, category: "alto"  },
+  { name: "Bicicletta",            emoji: "🚲", price: 200.00, category: "alto",  priceRange: { min: 100.00, max: 800.00 } },
+  { name: "Smartphone",            emoji: "📱", price: 300.00, category: "alto",  priceRange: { min: 150.00, max: 1200.00} },
+  { name: "Televisore",            emoji: "📺", price: 400.00, category: "alto",  priceRange: { min: 200.00, max: 2000.00} },
+  { name: "Laptop",                emoji: "💻", price: 500.00, category: "alto",  priceRange: { min: 300.00, max: 2000.00} },
+  { name: "Console videogiochi",   emoji: "🕹️", price: 350.00, category: "alto",  priceRange: { min: 200.00, max: 600.00 } },
+  { name: "Tablet",                emoji: "📟", price: 250.00, category: "alto",  priceRange: { min: 120.00, max: 700.00 } },
+  { name: "Frigorifero",           emoji: "🧊", price: 600.00, category: "alto",  priceRange: { min: 300.00, max: 1500.00} },
+  { name: "Fotocamera",            emoji: "📷", price: 400.00, category: "alto",  priceRange: { min: 150.00, max: 1500.00} },
+  { name: "Lavatrice",             emoji: "🫧", price: 500.00, category: "alto",  priceRange: { min: 300.00, max: 1200.00} },
+  { name: "Monopattino elettrico", emoji: "🛴", price: 300.00, category: "alto",  priceRange: { min: 150.00, max: 700.00 } },
 ];
 
 /* ================================================================
@@ -726,13 +746,19 @@ function answerOption(index) {
 /* ================================================================
    FEEDBACK
 ================================================================ */
+function priceRangeHint(product) {
+  const r = product.priceRange;
+  return `💡 Prezzo tipico di <strong>${product.name}</strong>: da <strong>${fmt(r.min)}</strong> a <strong>${fmt(r.max)}</strong>.`;
+}
+
 function showFeedback(isCorrect, ex) {
   const fb      = document.getElementById("feedback");
   const nextBtn = document.getElementById("btn-next");
+  const rangeHint = priceRangeHint(ex.product);
 
   if (isCorrect) {
     fb.className = "feedback-box show correct-fb";
-    fb.innerHTML = "✅ Bravo! Risposta corretta! 🎉";
+    fb.innerHTML = `✅ Bravo! Risposta corretta! 🎉<br><small style="font-weight:500">${rangeHint}</small>`;
   } else {
     let hint = "";
     if (ex.type === 1 || ex.type === 2) {
@@ -741,7 +767,7 @@ function showFeedback(isCorrect, ex) {
       hint = `Con <strong>${fmt(ex.product.price)}</strong> si compra di solito <strong>${ex.product.name}</strong>.`;
     }
     fb.className = "feedback-box show wrong-fb";
-    fb.innerHTML = `❌ Non è corretto. ${hint}`;
+    fb.innerHTML = `❌ Non è corretto. ${hint}<br><small style="font-weight:500">${rangeHint}</small>`;
   }
 
   nextBtn.className = "btn-next show";
