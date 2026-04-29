@@ -331,6 +331,92 @@
     }
     .pop { animation: popIn 0.45s ease; }
 
+    /* ===== TYPE 5 – CHEAPER COMPARISON ===== */
+    .cheaper-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .btn-cheaper {
+      background: #f5f5f5;
+      border: 3px solid #e0e0e0;
+      border-radius: 18px;
+      padding: 20px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 120px;
+      font-family: inherit;
+    }
+    .btn-cheaper:not(.answered):hover {
+      background: #e8eaf6;
+      border-color: #7986cb;
+      transform: translateY(-2px);
+    }
+    .btn-cheaper.correct {
+      background: #e8f5e9 !important;
+      border-color: #4caf50 !important;
+    }
+    .btn-cheaper.wrong {
+      background: #ffebee !important;
+      border-color: #ef5350 !important;
+    }
+    .btn-cheaper-emoji { font-size: 3.5em; line-height: 1; }
+    .btn-cheaper-name  { font-size: 1.05em; font-weight: 700; color: #2c3e50; text-align: center; }
+
+    /* ===== CONFIG SECTION ===== */
+    .config-section {
+      margin-bottom: 22px;
+    }
+    .config-label {
+      display: block;
+      font-size: 0.95em;
+      color: #555;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .config-count-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .type-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .btn-type-toggle {
+      border: 2px solid #c5cae9;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 0.85em;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f5f5f5;
+      color: #999;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .btn-type-toggle.active {
+      background: #e8eaf6;
+      border-color: #5c6bc0;
+      color: #3949ab;
+    }
+    .btn-type-toggle:hover { border-color: #9fa8da; }
+    @keyframes shakeBtn {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    .btn-type-toggle.shake { animation: shakeBtn 0.35s ease; }
+
     /* ===== TYPE 4 – PRICE TEXT INPUT ===== */
     .price-input-wrap {
       display: flex;
@@ -483,6 +569,11 @@
       .print-opt-emoji { font-size: 12pt; }
       .print-blank-row { margin-top: 8pt; font-size: 10pt; }
       .print-blank { display: inline-block; border-bottom: 1.5pt solid #333; width: 120pt; height: 12pt; vertical-align: bottom; }
+      .print-cheaper-grid { display: flex; gap: 8pt; margin: 4pt 0; }
+      .print-cheaper-item { flex: 1; border: 1pt solid #aaa; border-radius: 4pt; padding: 5pt; text-align: center; }
+      .print-cheaper-emoji { font-size: 14pt; }
+      .print-cheaper-name  { font-size: 8.5pt; font-weight: 700; margin-top: 2pt; }
+      .print-cheaper-circle { display: flex; align-items: center; justify-content: center; gap: 3pt; font-size: 8.5pt; font-weight: 700; margin-top: 4pt; }
       .print-answer-key {
         break-before: page;
         page-break-before: always;
@@ -561,6 +652,22 @@
         </div>
       </div>
 
+      <div class="section-heading">⚙️ Configura gli esercizi</div>
+      <div class="config-section">
+        <label class="config-label">Numero di esercizi:</label>
+        <div class="config-count-row">
+          <input type="number" id="game-count" class="print-count-input" value="10" min="1" max="40">
+        </div>
+        <label class="config-label">Tipi di esercizio:</label>
+        <div class="type-selector" id="game-type-selector">
+          <button class="btn-type-toggle active" data-type="1" onclick="toggleType(this,'game')">🤔 Sì/No</button>
+          <button class="btn-type-toggle active" data-type="2" onclick="toggleType(this,'game')">💶 Quale prezzo?</button>
+          <button class="btn-type-toggle active" data-type="3" onclick="toggleType(this,'game')">🛒 Cosa compro?</button>
+          <button class="btn-type-toggle active" data-type="4" onclick="toggleType(this,'game')">✏️ Scrivi il prezzo</button>
+          <button class="btn-type-toggle active" data-type="5" onclick="toggleType(this,'game')">⚖️ Quale costa meno?</button>
+        </div>
+      </div>
+
       <div class="center-btn">
         <button class="btn-start" onclick="startGame()">Inizia gli esercizi ▶</button>
       </div>
@@ -570,6 +677,16 @@
         <label class="print-label">Quanti esercizi vuoi stampare?</label>
         <div class="print-count-row">
           <input type="number" id="print-count" class="print-count-input" value="10" min="1" max="60">
+        </div>
+        <label class="config-label" style="margin-top:10px">Tipi di esercizio:</label>
+        <div class="type-selector" id="print-type-selector" style="margin-bottom:14px">
+          <button class="btn-type-toggle active" data-type="1" onclick="toggleType(this,'print')">🤔 Sì/No</button>
+          <button class="btn-type-toggle active" data-type="2" onclick="toggleType(this,'print')">💶 Quale prezzo?</button>
+          <button class="btn-type-toggle active" data-type="3" onclick="toggleType(this,'print')">🛒 Cosa compro?</button>
+          <button class="btn-type-toggle active" data-type="4" onclick="toggleType(this,'print')">✏️ Scrivi il prezzo</button>
+          <button class="btn-type-toggle active" data-type="5" onclick="toggleType(this,'print')">⚖️ Quale costa meno?</button>
+        </div>
+        <div class="print-count-row">
           <button class="btn-print-start" onclick="printExercises()">🖨️ Stampa PDF</button>
         </div>
       </div>
@@ -895,13 +1012,36 @@ function makeType4(product) {
   return { type: 4, product };
 }
 
+/**
+ * TYPE 5 – two products shown → pick the one that costs less
+ *   Products are drawn from two different price categories so there is
+ *   always a clear correct answer.
+ */
+function makeType5() {
+  const [cat1, cat2] = shuffle(["basso", "medio", "alto"]).slice(0, 2);
+  const p1 = randByCat(cat1);
+  const p2 = randByCat(cat2);
+  const cheaperIndex = p1.price <= p2.price ? 0 : 1;
+  return { type: 5, options: [p1, p2], cheaperIndex };
+}
+
 /* ================================================================
-   EXERCISE GENERATION (10 total: 3 × type1, 3 × type2, 2 × type3, 2 × type4)
+   EXERCISE GENERATION
 ================================================================ */
-function generateExercises() {
-  const typeSeq      = shuffle([1, 1, 1, 2, 2, 2, 3, 3, 4, 4]);
-  const productPool  = shuffle(PRODUCTS);
+/**
+ * Generate `count` exercises using the given type list.
+ * Types are cycled in shuffled order until the count is reached.
+ */
+function generateExercises(count, types) {
+  let typeSeq = [];
+  while (typeSeq.length < count) {
+    typeSeq = typeSeq.concat(shuffle([...types]));
+  }
+  typeSeq = typeSeq.slice(0, count);
+
+  const productPool = shuffle(PRODUCTS);
   return typeSeq.map((type, i) => {
+    if (type === 5) return makeType5();
     const product = productPool[i % productPool.length];
     return type === 1 ? makeType1(product)
          : type === 2 ? makeType2(product)
@@ -930,7 +1070,10 @@ function showScreen(id) {
    GAME CONTROL
 ================================================================ */
 function startGame() {
-  exercises    = generateExercises();
+  const count = Math.max(1, Math.min(40, parseInt(document.getElementById("game-count").value, 10) || 10));
+  document.getElementById("game-count").value = count;
+  const types = getSelectedTypes("game-type-selector");
+  exercises    = generateExercises(count, types);
   currentIndex = 0;
   score        = 0;
   showScreen("screen-exercise");
@@ -1018,6 +1161,23 @@ function renderExercise() {
       <div class="exercise-question">🛒 Con questo prezzo, cosa posso comprare?</div>
       <div class="price-big">${fmt(ex.product.price)}</div>
       <div class="options-list">${optHtml}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="next-wrap">
+        <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
+      </div>`;
+
+  } else if (ex.type === 5) {
+    // ── TYPE 5 ──────────────────────────────────────────────────
+    const optsHtml = ex.options.map((opt, i) => `
+      <button class="btn-cheaper" id="cheaper-${i}" onclick="answerCheaper(${i})">
+        <span class="btn-cheaper-emoji">${opt.emoji}</span>
+        <span class="btn-cheaper-name">${opt.name}</span>
+      </button>
+    `).join("");
+
+    html = `
+      <div class="exercise-question">⚖️ Quale costa meno?</div>
+      <div class="cheaper-grid">${optsHtml}</div>
       <div class="feedback-box" id="feedback"></div>
       <div class="next-wrap">
         <button class="btn-next" id="btn-next" onclick="nextExercise()">${nextLabel}</button>
@@ -1135,6 +1295,25 @@ function answerType4() {
   showFeedback(isCorrect, ex, val);
 }
 
+function answerCheaper(index) {
+  if (answered) return;
+  answered = true;
+
+  const ex        = exercises[currentIndex];
+  const isCorrect = index === ex.cheaperIndex;
+  if (isCorrect) score++;
+
+  ex.options.forEach((opt, i) => {
+    const btn = document.getElementById("cheaper-" + i);
+    btn.classList.add("answered");
+    btn.onclick = null;
+    if (i === ex.cheaperIndex) btn.classList.add("correct");
+    else if (i === index)      btn.classList.add("wrong");
+  });
+
+  showFeedback(isCorrect, ex);
+}
+
 /* ================================================================
    FEEDBACK
 ================================================================ */
@@ -1146,27 +1325,36 @@ function priceRangeHint(product) {
 function showFeedback(isCorrect, ex, userVal = null) {
   const fb      = document.getElementById("feedback");
   const nextBtn = document.getElementById("btn-next");
-  const rangeHint = priceRangeHint(ex.product);
+  const rangeHint = ex.type !== 5 ? priceRangeHint(ex.product) : "";
+  const hintLine  = rangeHint ? `<br><small style="font-weight:500">${rangeHint}</small>` : "";
 
   if (isCorrect) {
     let correctMsg = "✅ Bravo! Risposta corretta! 🎉";
     if (ex.type === 4 && userVal !== null) {
       correctMsg = `✅ Bravo! ${fmt(userVal)} è un prezzo ragionevole! 🎉`;
+    } else if (ex.type === 5) {
+      const cheaper = ex.options[ex.cheaperIndex];
+      const pricier = ex.options[1 - ex.cheaperIndex];
+      correctMsg = `✅ Bravo! <strong>${cheaper.emoji} ${cheaper.name}</strong> costa <strong>${fmt(cheaper.price)}</strong>, meno di <strong>${pricier.emoji} ${pricier.name}</strong> (${fmt(pricier.price)}). 🎉`;
     }
     fb.className = "feedback-box show correct-fb";
-    fb.innerHTML = `${correctMsg}<br><small style="font-weight:500">${rangeHint}</small>`;
+    fb.innerHTML = `${correctMsg}${hintLine}`;
   } else {
     let hint = "";
     if (ex.type === 1 || ex.type === 2) {
       hint = `<strong>${ex.product.name}</strong> costa di solito <strong>${fmt(ex.product.price)}</strong>.`;
     } else if (ex.type === 3) {
       hint = `Con <strong>${fmt(ex.product.price)}</strong> si compra di solito <strong>${ex.product.name}</strong>.`;
-    } else {
+    } else if (ex.type === 4) {
       const r = ex.product.priceRange;
       hint = `Un prezzo ragionevole per <strong>${ex.product.name}</strong> è tra <strong>${fmt(r.min)}</strong> e <strong>${fmt(r.max)}</strong>.`;
+    } else {
+      const cheaper = ex.options[ex.cheaperIndex];
+      const pricier = ex.options[1 - ex.cheaperIndex];
+      hint = `<strong>${cheaper.emoji} ${cheaper.name}</strong> costa <strong>${fmt(cheaper.price)}</strong>, meno di <strong>${pricier.emoji} ${pricier.name}</strong> (${fmt(pricier.price)}).`;
     }
     fb.className = "feedback-box show wrong-fb";
-    fb.innerHTML = `❌ Non è corretto. ${hint}<br><small style="font-weight:500">${rangeHint}</small>`;
+    fb.innerHTML = `❌ Non è corretto. ${hint}${hintLine}`;
   }
 
   nextBtn.className = "btn-next show";
@@ -1201,22 +1389,8 @@ function showResults() {
 /* ================================================================
    PRINT MODE
 ================================================================ */
-function generatePrintExercises(count) {
-  const baseTypes = [1, 2, 3, 4];
-  let typeSeq = [];
-  while (typeSeq.length < count) {
-    typeSeq = typeSeq.concat(shuffle([...baseTypes]));
-  }
-  typeSeq = typeSeq.slice(0, count);
-
-  const productPool = shuffle(PRODUCTS);
-  return typeSeq.map((type, i) => {
-    const product = productPool[i % productPool.length];
-    if (type === 1) return makeType1(product);
-    if (type === 2) return makeType2(product);
-    if (type === 3) return makeType3(product);
-    return makeType4(product);
-  });
+function generatePrintExercises(count, types) {
+  return generateExercises(count, types);
 }
 
 function renderPrintExercise(ex, num) {
@@ -1258,7 +1432,7 @@ function renderPrintExercise(ex, num) {
       <div class="print-ex-price-big">${fmt(ex.product.price)}</div>
       <ul class="print-ex-opts">${optsHtml}</ul>`;
 
-  } else {
+  } else if (ex.type === 4) {
     content = `
       <div class="print-ex-q">✏️ Scrivi un prezzo ragionevole:</div>
       <div class="print-ex-product">
@@ -1266,6 +1440,18 @@ function renderPrintExercise(ex, num) {
         <span class="print-ex-pname">${ex.product.name}</span>
       </div>
       <div class="print-blank-row">€ <span class="print-blank"></span></div>`;
+
+  } else {
+    const itemsHtml = ex.options.map((opt, i) => `
+      <div class="print-cheaper-item">
+        <div class="print-cheaper-emoji">${opt.emoji}</div>
+        <div class="print-cheaper-name">${opt.name}</div>
+        <div class="print-cheaper-circle"><span class="print-circle"></span> ${String.fromCharCode(65 + i)})</div>
+      </div>`
+    ).join("");
+    content = `
+      <div class="print-ex-q">⚖️ Quale costa meno? (cerchia la risposta)</div>
+      <div class="print-cheaper-grid">${itemsHtml}</div>`;
   }
 
   return `
@@ -1279,8 +1465,9 @@ function printExercises() {
   const countInput = document.getElementById("print-count");
   const count = Math.max(1, Math.min(60, parseInt(countInput.value, 10) || 10));
   countInput.value = count;
+  const types = getSelectedTypes("print-type-selector");
 
-  const exs = generatePrintExercises(count);
+  const exs = generatePrintExercises(count, types);
 
   const exercisesHtml = exs.map((ex, i) => renderPrintExercise(ex, i + 1)).join("");
 
@@ -1294,8 +1481,11 @@ function printExercises() {
     } else if (ex.type === 3) {
       const correct = ex.options.find(o => o.isCorrect);
       ans = correct ? `${correct.product.emoji} ${correct.product.name}` : "—";
-    } else {
+    } else if (ex.type === 4) {
       ans = `${fmt(ex.product.priceRange.min)} – ${fmt(ex.product.priceRange.max)}`;
+    } else {
+      const cheaper = ex.options[ex.cheaperIndex];
+      ans = `${cheaper.emoji} ${cheaper.name} (${fmt(cheaper.price)})`;
     }
     return `<div class="print-answer-item"><span class="ans-num">${i + 1}.</span> ${ans}</div>`;
   }).join("");
@@ -1314,6 +1504,30 @@ function printExercises() {
   `;
 
   window.print();
+}
+
+/* ================================================================
+   CONFIG HELPERS
+================================================================ */
+function toggleType(btn, context) {
+  const selectorId = context === "game" ? "game-type-selector" : "print-type-selector";
+  const selector   = document.getElementById(selectorId);
+  const active     = selector.querySelectorAll(".btn-type-toggle.active");
+  // Prevent deselecting the last active type – give visual feedback
+  if (btn.classList.contains("active") && active.length === 1) {
+    btn.classList.remove("shake");
+    btn.offsetWidth; // trigger reflow to restart animation
+    btn.classList.add("shake");
+    return;
+  }
+  btn.classList.toggle("active");
+}
+
+function getSelectedTypes(selectorId) {
+  const selector = document.getElementById(selectorId);
+  const types = Array.from(selector.querySelectorAll(".btn-type-toggle.active"))
+    .map(btn => parseInt(btn.dataset.type, 10));
+  return types.length > 0 ? types : [1];
 }
 </script>
 </body>
