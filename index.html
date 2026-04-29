@@ -1435,6 +1435,13 @@ function priceRangeHint(product) {
   return `💡 Prezzo tipico di <strong>${product.name}</strong>: da <strong>${fmt(r.min)}</strong> a <strong>${fmt(r.max)}</strong>.`;
 }
 
+/** Return a short category label with emoji */
+function catLabel(cat, long = false) {
+  if (cat === "basso") return long ? "💚 Basso (fino a €5)"  : "💚 Basso";
+  if (cat === "medio") return long ? "🟡 Medio (€5–€100)"   : "🟡 Medio";
+  return                      long ? "🔴 Alto (oltre €100)" : "🔴 Alto";
+}
+
 function showFeedback(isCorrect, ex, userVal = null) {
   const fb      = document.getElementById("feedback");
   const nextBtn = document.getElementById("btn-next");
@@ -1454,8 +1461,7 @@ function showFeedback(isCorrect, ex, userVal = null) {
       const cheaper   = ex.options[1 - ex.moreExpensiveIndex];
       correctMsg = `✅ Bravo! <strong>${expensive.emoji} ${expensive.name}</strong> costa <strong>${fmt(expensive.price)}</strong>, più di <strong>${cheaper.emoji} ${cheaper.name}</strong> (${fmt(cheaper.price)}). 🎉`;
     } else if (ex.type === 7) {
-      const catName = ex.product.category === "basso" ? "💚 Basso" : ex.product.category === "medio" ? "🟡 Medio" : "🔴 Alto";
-      correctMsg = `✅ Bravo! <strong>${ex.product.emoji} ${ex.product.name}</strong> appartiene alla categoria <strong>${catName}</strong>! 🎉`;
+      correctMsg = `✅ Bravo! <strong>${ex.product.emoji} ${ex.product.name}</strong> appartiene alla categoria <strong>${catLabel(ex.product.category)}</strong>! 🎉`;
     }
     fb.className = "feedback-box show correct-fb";
     fb.innerHTML = `${correctMsg}${hintLine}`;
@@ -1477,8 +1483,7 @@ function showFeedback(isCorrect, ex, userVal = null) {
       const cheaper   = ex.options[1 - ex.moreExpensiveIndex];
       hint = `<strong>${expensive.emoji} ${expensive.name}</strong> costa <strong>${fmt(expensive.price)}</strong>, più di <strong>${cheaper.emoji} ${cheaper.name}</strong> (${fmt(cheaper.price)}).`;
     } else {
-      const catName = ex.product.category === "basso" ? "💚 Basso (fino a €5)" : ex.product.category === "medio" ? "🟡 Medio (€5–€100)" : "🔴 Alto (oltre €100)";
-      hint = `<strong>${ex.product.emoji} ${ex.product.name}</strong> costa <strong>${fmt(ex.product.price)}</strong> e appartiene alla categoria <strong>${catName}</strong>.`;
+      hint = `<strong>${ex.product.emoji} ${ex.product.name}</strong> costa <strong>${fmt(ex.product.price)}</strong> e appartiene alla categoria <strong>${catLabel(ex.product.category, true)}</strong>.`;
     }
     fb.className = "feedback-box show wrong-fb";
     fb.innerHTML = `❌ Non è corretto. ${hint}${hintLine}`;
@@ -1642,8 +1647,7 @@ function printExercises() {
       const expensive = ex.options[ex.moreExpensiveIndex];
       ans = `${expensive.emoji} ${expensive.name} (${fmt(expensive.price)})`;
     } else {
-      const cat = ex.product.category;
-      ans = cat === "basso" ? "💚 Basso" : cat === "medio" ? "🟡 Medio" : "🔴 Alto";
+      ans = catLabel(ex.product.category);
     }
     return `<div class="print-answer-item"><span class="ans-num">${i + 1}.</span> ${ans}</div>`;
   }).join("");
